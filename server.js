@@ -1,8 +1,28 @@
 const express = require("express");
-const res = require("express/lib/response");
+let mongodb = require("mongodb")
+const dotenv = require("dotenv")
+dotenv.config()
+
+
+
+
 
 const app = express();
+let db
+
+
+// CONNECT MONGODB
+let connectionString = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.timky.mongodb.net/TodoApp?retryWrites=true&w=majority`
+mongodb.connect(connectionString, {useNewUrlParser: true}, (err, client) => {
+    db = client.db()
+    PORT = 3000
+    app.listen(PORT, function() {
+    console.log(`Your server is running on: ${PORT}`)})
+});
+
+
 app.use(express.urlencoded({extended: false}));
+
 
 app.get("/", (req,res) => {
     res.send(`
@@ -60,12 +80,8 @@ app.get("/", (req,res) => {
 })
 
 app.post('/create-item', (req,res) => {
-    console.log("make this dynamiz in a minute from now");
-    console.log(req.body.item);
-    res.send("Thank FOr SUbmitting the form")
+    db.collection('items').insertOne({text: req.body.item}, () => {
+        res.send("Thank FOr SUbmitting the form")
+    })
 });
 
-PORT = 3000
-app.listen(PORT, function() {
-    console.log(`Your server is running on: ${PORT}`)
-})
