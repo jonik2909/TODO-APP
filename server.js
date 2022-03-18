@@ -17,7 +17,7 @@ app.use(express.static("public"))
 
 
 // CONNECT MONGODB
-let connectionString = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.timky.mongodb.net/TodoApp?retryWrites=true&w=majority`
+let connectionString = `mongodb+srv://jonik2909:jonik2909@cluster0.timky.mongodb.net/TodoApp?retryWrites=true&w=majority`
 mongodb.connect(connectionString, {useNewUrlParser: true}, (err, client) => {
     db = client.db()
     app.listen(port)
@@ -31,7 +31,7 @@ app.use(authenticated)
 function authenticated(req,res, next) {
     res.set("WWW-Authenticate", "Basic realm='Simple Todo App'")
     console.log(req.headers.authorization);
-    if (req.headers.authorization == `${process.env.ADMIN}`) {
+    if (req.headers.authorization == "Basic am9uaWsyOTA5OmpvbmlrMjkwOQ==") {
         next()
     } else {
         res.status(401).send("Authentication Failed")
