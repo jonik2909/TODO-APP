@@ -7,6 +7,12 @@ dotenv.config()
 const app = express();
 let db
 
+let port = process.env.PORT
+if (port == null || port == "") {
+    port = 3000
+}
+
+
 app.use(express.static("public"))
 
 
@@ -14,9 +20,7 @@ app.use(express.static("public"))
 let connectionString = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.timky.mongodb.net/TodoApp?retryWrites=true&w=majority`
 mongodb.connect(connectionString, {useNewUrlParser: true}, (err, client) => {
     db = client.db()
-    PORT = 3000
-    app.listen(PORT, function() {
-    console.log(`Your server is running on: ${PORT}`)})
+    app.listen(port)
 });
 
 app.use(express.json());
